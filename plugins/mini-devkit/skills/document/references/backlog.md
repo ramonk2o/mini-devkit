@@ -1,0 +1,129 @@
+# BACKLOG.md
+
+`BACKLOG.md`, at the project root, is the single place for feature ideas and for the feature being built. Each entry starts from **why** the user wants it, because a feature that loses its motivation gets built wrong or never gets prioritized. Implemented features leave the file.
+
+Read `BACKLOG.md` before changing it.
+
+## File structure
+
+```markdown
+# Backlog
+
+<legend>
+
+## <Area>
+
+### <Feature name>
+<entry fields>
+
+## Discarded
+
+### <Feature name>
+- **Description:** …
+- **Why discarded:** … (date)
+```
+
+- Areas (`##`) group features by part of the product (e.g. "Editor", "Sync"). Put each feature in the area it belongs to; if none fits, propose a new area and confirm before creating it.
+- Remove an area as soon as it is left empty.
+- "Discarded" is always the last section, so discarded ideas aren't proposed again. Omit it while empty.
+
+### Legend
+
+Translated to the file's language:
+
+```markdown
+Feature ideas and the feature being built, managed with the `document` skill. Implemented features leave this file: what changed goes to CHANGELOG.md and the rules to SPEC.md.
+
+Status: **Idea** → **In progress** (one at a time) → done (leaves the file in the commit that implements it). Discarded ideas go to the last section.
+```
+
+## Statuses
+
+| Status | Meaning | Extra fields |
+|---|---|---|
+| **Idea** | Recorded, not decided. | — |
+| **In progress** | Being built. Only one at a time. | **To check by hand** |
+| done | Implemented and verified: the entry leaves the file. | — |
+
+Only the user moves a feature to Discarded. A new entry is always an Idea.
+
+## Entry format
+
+```markdown
+### <Feature name>
+- **Status:** Idea
+- **Motivation:** <the problem today, from the user's side>
+  - When <situation>, I want <outcome>. (only when there's more than one distinct context)
+- **Description:** <the solution, from the user's point of view>
+- **Decisions:**
+  - <a rule or choice already made>
+- **Out of scope:** <what was explicitly left out>
+- **Open questions:**
+  - <what is still undecided>
+- **Notes (<what they are>, <date>):**
+  - <findings from research, trials or options discussed>
+```
+
+Omit any field with nothing to say; Status, Motivation and Description are always present.
+
+How to fill it:
+- **Motivation** comes first because it's what everything else is judged against. Don't copy the user literally: condense what they said into a short statement of the problem, quoting only key phrases or expressions when they help understanding. Add "When…, I want…" sub-items only when the feature serves distinct situations that would shape the solution differently; otherwise they just repeat the motivation. If the motivation was never stated, write "not recorded" rather than inventing one.
+- **Description** describes the behavior the user will see, not the implementation.
+- **Decisions** hold choices already made (rules, behaviors, constraints, technical options chosen). When the feature changes existing behavior, name the SPEC.md rule that changes and how. No file paths or code snippets: they go stale fast.
+- **Open questions** keep undecided points visible instead of silently assuming an answer.
+- **Notes** keep context that isn't a decision yet: research findings, a trial's results, options weighed. Date them and say what they are (e.g. "options discussed on 2026-10-12, nothing decided").
+- Write only what the user said or decided. Don't invent requirements; an assumption is an open question.
+
+## Operations
+
+### Create the file
+When the project has no `BACKLOG.md`, create it with the title and the legend. If an older backlog file exists (e.g. `FEATURES.md`, `TODO.md`, `IDEAS.md`), propose migrating it: rename it with `git mv` to keep its history, and convert its entries to this format.
+
+### Capture from the conversation
+Turn what was discussed into an entry. Don't interview the user; synthesize what you already know from the conversation and the codebase. The only exception is the motivation: if it never came up, ask at most 2 or 3 short questions about it (what problem does it solve? in what situation is it missing?). Anything else unresolved becomes an open question.
+
+Show the draft (and the area it will go in) and wait for the user's OK before writing, since a synthesis involves interpretation. When the capture follows an interview whose final summary the user approved, present that summary as the entry and its approval as the OK: don't ask twice.
+
+### Add an idea
+When the user states an idea:
+- **Clear:** record it right away and tell them what was written.
+- **Vague:** ask 2 or 3 short questions first (what problem does it solve? how do they picture it working?).
+
+Only record it; don't implement it.
+
+### Check for duplicates
+Before adding or capturing, look for an identical or similar entry (including in Discarded). If one exists, show it and ask whether to merge into it or create a separate one. When merging, update the fields and keep the old notes that still hold.
+
+### Present
+Summarize by area: each feature's name and status. Apply the filter the user asks for (area, status). Give a feature's details only when asked.
+
+### Start a feature
+1. If another feature is In progress, say so and ask what to do: finish it, pause it back to Idea, or stop.
+2. Create the entry if it doesn't exist (a direct request).
+3. Set it **In progress** and add **To check by hand**: the rules that only show in the real app, for the user to try once it's built. The automated checks live in the tests, not here.
+
+### Finish a feature
+Verifying the feature is the job of whoever built it (e.g. the `build` skill); this step only records it, in the same commit as the code.
+1. Update SPEC.md with the rules of what was built (`references/spec.md`).
+2. Add the change to CHANGELOG.md (`references/changelog.md`).
+3. Remove the entry and, if its area is left empty, the area.
+4. Give the commit message the verification results: what passed, and the "To check by hand" list as a block starting with a line that says exactly `To check by hand:`.
+
+If the user later finds a problem in use, it's handled as a bug fix, not by reopening the entry.
+
+### Change status
+Update the field when the user asks, e.g. pause a feature (In progress → Idea). Write it directly and tell them.
+
+### Discard
+Move the entry to "Discarded", keeping only its **Description** and a **Why discarded** line with the reason and the date. If its area is left empty, remove the area.
+
+### Clean up
+Look for:
+- duplicates and similar entries that could be merged
+- entries already implemented in the code (check the code, SPEC.md and CHANGELOG.md)
+- entries the user has dropped
+
+Show what you intend to change and wait for the OK. Implemented ones leave the file (after checking they're in CHANGELOG.md); dropped ones go to Discarded.
+
+### Reorganize
+When areas stopped making sense (an area too big, features in the wrong place), propose the new structure and apply it only after it's approved.
