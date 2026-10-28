@@ -18,7 +18,7 @@ Nothing is written before the user's OK. Collect the proposals of steps 1, 5, 6 
 
 If the folder isn't a software project, say that this skill is for software projects and stop.
 
-**Git.** The cycle commits after each feature, bug fix and document change, so the project must be a git repository. If it isn't one, propose `git init` and, when there's no `.gitignore`, a short one for the project's stack (dependencies, build output, test reports, `.env`, OS files like `.DS_Store`, and `.claude/settings.local.json`). If it's a repository with no commits yet, note that the first commit will come at the end (step 9).
+**Git.** The cycle commits after each feature, bug fix and document change, and builds features and fixes on their own branches, so the project must be a git repository. If it isn't one, propose `git init` and, when there's no `.gitignore`, a short one for the project's stack (dependencies, build output, test reports, `.env`, OS files like `.DS_Store`, and `.claude/settings.local.json`). If it's a repository with no commits yet, note that the first commit will come at the end (step 9).
 
 **Tests.** The cycle needs automated tests: `build` writes them first and `tester` runs them. Find the test framework and command (package.json scripts, Makefile, pyproject, Cargo.toml, go.mod, CI config…). If there's none, say so and ask whether the user wants to set one up first. Don't generate a cycle that can't run.
 
@@ -70,7 +70,7 @@ Uses the `grilling`, `document` and `build` skills and the `tester` agent from t
 
 1. **Idea:** if the idea is clear, record it with `document`. If it leaves behavior open (decisions that would change what gets built), start a `grilling` interview; before its final summary, load `document` and write the summary as the backlog entry, so my OK approves the text that will be recorded. "Just note it" (<the same phrases in the user's language>) always skips the interview.
 2. **Build:** `build`.
-3. **Bugs:** no backlog entry or tester. If the bug can be reproduced in a test (see Tests), write the test and show it fails, then fix it. If it needs <the same real app as in Tests>, put the steps to reproduce it in the commit message's `To check by hand:` block. Record it with `document` (CHANGELOG under Fixed; SPEC.md if a rule changed) and commit. If the fix needs a decision about behavior, it's a feature: go to step 1.
+3. **Bugs:** no backlog entry or tester. Work on a `fix/<short-name>` branch created from the up-to-date main branch. If the bug can be reproduced in a test (see Tests), write the test and show it fails, then fix it. If it needs <the same real app as in Tests>, put the steps to reproduce it in the commit message's `To check by hand:` block. Record it with `document` (CHANGELOG under Fixed; SPEC.md if a rule changed) and commit on the branch. Once it's confirmed fixed, merge it into the main branch, delete the branch and push. If the fix needs a decision about behavior, it's a feature: go to step 1.
 4. **Release:** follow <where the release steps live>.
 ````
 
@@ -90,9 +90,9 @@ If the project already has a `CLAUDE.md` (or `AGENTS.md`, `.claude/CLAUDE.md`), 
 The cycle runs the same commands many times (tests before and after the code, the build, the tester's rounds, commits), and a permission prompt on each one breaks the flow. Propose `.claude/settings.json` entries under `permissions.allow` for:
 
 - the test, build, lint and type-check commands from step 2, each as a prefix rule so its arguments are covered (e.g. `Bash(npm test:*)`, `Bash(npm run build:*)`, `Bash(npx vitest:*)`);
-- the git commands the cycle uses locally: `git status`, `git diff`, `git log`, `git add`, `git commit`.
+- the git commands the cycle uses locally: `git status`, `git diff`, `git log`, `git add`, `git commit`, `git switch`, `git merge`.
 
-Never add install, publish, deploy or `git push` commands, or anything that deletes files: those keep asking. If the file exists, merge: keep every existing entry and setting, add only what's missing. Show the resulting list.
+Never add install, publish, deploy or `git push` commands, or anything that deletes files or branches: those keep asking. If the file exists, merge: keep every existing entry and setting, add only what's missing. Show the resulting list.
 
 ## 7. Orphans and redundancies
 

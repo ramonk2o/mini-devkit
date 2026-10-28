@@ -40,6 +40,9 @@ You don't need to call `grilling`, `document` or `build` by name. Just talk ("no
                                    build: critical test list ──► your OK
                                                   │
                                                   ▼
+                                   new branch: feature/<name>
+                                                  │
+                                                  ▼
                                    tests first (shown failing) ──► code
                                                   │
                                                   ▼
@@ -50,6 +53,9 @@ You don't need to call `grilling`, `document` or `build` by name. Just talk ("no
                                                   │
                                                   ▼
                                    you check by hand what tests can't
+                                                  │
+                                                  ▼
+                                   merge into main, delete branch, push
 ```
 
 ### 1. Setup (once per project)
@@ -58,7 +64,7 @@ You don't need to call `grilling`, `document` or `build` by name. Just talk ("no
 
 - `git init` and a `.gitignore`, if the project isn't a repository yet;
 - a `CLAUDE.md` with the project's real commands, test conventions and the development cycle (an existing CLAUDE.md is updated, not overwritten);
-- `.claude/settings.json` permissions for the test, build and local git commands, so the cycle doesn't stop on a prompt for each run (install, publish, push and deletes keep asking);
+- `.claude/settings.json` permissions for the test, build and local git commands (including `switch` and `merge`), so the cycle doesn't stop on a prompt for each run (install, publish, push and deletes keep asking);
 - what the cycle leaves orphaned: old `TODO.md`/`FEATURES.md`, local skills that overlap the plugin, broken references.
 
 It then creates the missing product documents through `document`. The cycle needs automated tests; if the project has none, setup says so before going on.
@@ -73,6 +79,8 @@ A clear idea is recorded straight into `BACKLOG.md` as an **Idea**. If it leaves
 
 1. **Rules check.** If the entry is missing a few rules, Claude asks them directly; if it's still a bare idea, it offers a `grilling` interview first. Tests built on guessed rules would encode assumptions nobody approved.
 2. **Critical test list.** In plain language, no code, split in two: what the test suite will check, and what you'll **check by hand** in the real app (visuals, focus, dragging…). You approve the list; the entry becomes **In progress**.
+
+All the work happens on a `feature/<name>` branch created from an up-to-date main branch, so main only receives finished, verified features.
 3. **Tests first.** The automated tests are written and run, and must fail for the right reason: the feature is missing. A test that passes before the code exists isn't testing the feature.
 4. **Code.** Written until the critical tests, the whole suite and the build pass. A critical test is never changed to make it pass without asking you.
 
@@ -88,11 +96,11 @@ This repeats until a round has no failures, or stops after 3 rounds to show you 
 
 ### 5. Finish
 
-`document` moves the feature out of the backlog: the rules that were actually built go to `SPEC.md` and the change goes to `CHANGELOG.md` under `[Unreleased]`. Code, tests and the three documents go in **one commit**, whose message records the test results, the tester's rounds and a `To check by hand:` block (findable later with `git log --grep "To check by hand"`). You then check those items in the real app; anything that fails there is handled as a bug.
+`document` moves the feature out of the backlog: the rules that were actually built go to `SPEC.md` and the change goes to `CHANGELOG.md` under `[Unreleased]`. Code, tests and the three documents go in **one commit**, whose message records the test results, the tester's rounds and a `To check by hand:` block (findable later with `git log --grep "To check by hand"`). You then check those items in the real app; anything that fails there is fixed on the same branch. Once you confirm everything works, the branch is merged into main, deleted and main is pushed. A merge conflict stops the cycle and is shown to you. Anything that fails after the merge is handled as a bug.
 
 ### Bugs and releases
 
-- **Bug:** no backlog entry, no tester. If it can be reproduced in a test, the test is written and shown failing first, then the fix. The fix is recorded under Fixed in the changelog (and in SPEC.md if a rule changed). If the fix needs a decision about behavior, it's a feature and goes back to the idea step.
+- **Bug:** no backlog entry, no tester, on its own `fix/<name>` branch, merged into main and pushed once the fix is confirmed. If it can be reproduced in a test, the test is written and shown failing first, then the fix. The fix is recorded under Fixed in the changelog (and in SPEC.md if a rule changed). If the fix needs a decision about behavior, it's a feature and goes back to the idea step.
 - **Release:** "release 1.4.0" moves the `[Unreleased]` changes into a version in `CHANGELOG.md`, after you confirm the version, date and entries. Pushing always asks first.
 
 ## The three documents

@@ -19,7 +19,8 @@ Talk to the user in the language of the conversation.
    - **Enough rules** (usually, when the idea was interviewed): go on. Don't re-ask what the entry already decides.
    - **One to three specific points open:** ask them directly, each with your recommended answer, and record the answers in the entry's Decisions.
    - **Key behavior undecided across several connected decisions** (e.g. the entry is still a bare idea): stop and offer a `grilling` interview, recording the answers in the entry.
-4. Do whatever the project instructions require before writing code.
+4. Create the feature's branch: from the main branch (`main` or `master`), up to date and with a clean working tree, run `git switch -c feature/<short-name>`. All the feature's work and its commit happen there, so the main branch only ever receives finished, verified work. If there are uncommitted changes, ask the user what to do with them first. If the work is already on this feature's branch (e.g. resuming), stay on it.
+5. Do whatever the project instructions require before writing code.
 
 ## 2. Critical test list
 
@@ -64,10 +65,11 @@ Repeat until a report comes back with no failures. After 3 rounds with failures 
 
 1. **Optional cleanup:** when the diff is large (many files, or new modules), run the `simplify` skill to make the code more direct and readable, then run the test suite and build again. Skip it for small changes.
 2. With the `document` skill, finish the feature: it updates SPEC.md with what was built, adds the change to CHANGELOG.md and removes the entry from BACKLOG.md.
-3. Commit everything in a single commit (code, tests, `BACKLOG.md`, `SPEC.md`, `CHANGELOG.md`), unless project instructions say otherwise. The commit message records the verification:
+3. Commit everything on the feature's branch in a single commit (code, tests, `BACKLOG.md`, `SPEC.md`, `CHANGELOG.md`), unless project instructions say otherwise. The commit message records the verification:
    - the test suite and build results
    - the tester's last report, summarized: rounds run, what it found and how it was resolved, extra tests kept (or why there was no tester)
    - what is left for the user to check by hand, as a block starting with a line that says exactly `To check by hand:`, one item per line, so it can be found later with `git log --grep`
-4. Show the user the "To check by hand" list. If something fails in use, it's fixed as a bug.
+4. Show the user the "To check by hand" list and wait for them to check it. If something fails, fix it on the same branch (test first when it can be reproduced in one) and commit.
+5. **Merge and push:** once the user confirms everything works (or right after the commit, if there's nothing to check by hand), switch to the main branch, `git merge feature/<short-name>`, delete the branch with `git branch -d`, and push the main branch if the repository has a remote. If the merge has conflicts, stop and show them instead of resolving them on your own. Anything that fails after the merge is fixed as a bug.
 
 A feature with automated tests is only finished through step 5: without a tester report it hasn't been independently checked, and the commit message would claim more than was done.

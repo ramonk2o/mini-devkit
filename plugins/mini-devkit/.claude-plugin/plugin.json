@@ -1,6 +1,6 @@
 {
   "name": "mini-devkit",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A fixed development cycle: interview ideas (grilling), keep BACKLOG/SPEC/CHANGELOG (document), build features test-first with an independent tester (build), and set up any project for it (setup).",
   "author": {
     "name": "Ramon",
