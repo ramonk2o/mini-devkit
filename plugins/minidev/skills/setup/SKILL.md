@@ -1,12 +1,12 @@
 ---
 name: setup
-description: Set up a software project for the mini-devkit development cycle (grilling, document and build skills, tester agent) by making it a git repository if needed, writing or updating its CLAUDE.md, allowing its test and build commands in the project's permissions, creating the product documents, and pointing out what adopting the cycle left orphaned or redundant. Run only when the user invokes it.
+description: Set up a software project for the minidev development cycle (grilling, document and build skills, tester agent) by making it a git repository if needed, writing or updating its CLAUDE.md, allowing its test and build commands in the project's permissions, creating the product documents, and pointing out what adopting the cycle left orphaned or redundant. Run only when the user invokes it.
 disable-model-invocation: true
 ---
 
 # Setup
 
-Prepares a project so it works with the development cycle of the `mini-devkit` plugin: the `grilling`, `document` and `build` skills and the `tester` agent, which come with this plugin. The cycle is the same in every project; what changes is the project's own facts (commands, conventions, how tests are written), so the CLAUDE.md has a fixed part, copied from the template below, and a discovered part, found in the repository or asked.
+Prepares a project so it works with the development cycle of the `minidev` plugin: the `grilling`, `document` and `build` skills and the `tester` agent, which come with this plugin. The cycle is the same in every project; what changes is the project's own facts (commands, conventions, how tests are written), so the CLAUDE.md has a fixed part, copied from the template below, and a discovered part, found in the repository or asked.
 
 Talk to the user in the language of the conversation. Write the CLAUDE.md in English.
 
@@ -66,7 +66,7 @@ Build the file from the template below. Fill every `<…>`; the final file has n
 - <Rules that change data or state> are tested <how>, as in `<example test file>`. Only what needs <the real app, named for this project: e.g. a real browser, a device> (<what: e.g. focus, dragging, visuals>) goes into "To check by hand".
 
 ## Development cycle
-Uses the `grilling`, `document` and `build` skills and the `tester` agent from the `mini-devkit` plugin. When a step needs one that isn't available, tell the user and stop; don't imitate it from memory.
+Uses the `grilling`, `document` and `build` skills and the `tester` agent from the `minidev` plugin. When a step needs one that isn't available, tell the user and stop; don't imitate it from memory.
 
 1. **Idea:** if the idea is clear, record it with `document`. If it leaves behavior open (decisions that would change what gets built), start a `grilling` interview; before its final summary, load `document` and write the summary as the backlog entry, so my OK approves the text that will be recorded. "Just note it" (<the same phrases in the user's language>) always skips the interview.
 2. **Build:** `build`.

@@ -1,6 +1,6 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "mini-devkit",
+  "name": "minidev",
   "description": "Ramon's development cycle for Claude Code.",
   "owner": {
     "name": "Ramon",
@@ -8,9 +8,9 @@
   },
   "plugins": [
     {
-      "name": "mini-devkit",
+      "name": "minidev",
       "description": "A fixed development cycle: interview ideas (grilling), keep BACKLOG/SPEC/CHANGELOG (document), build features test-first with an independent tester (build), and set up any project for it (setup).",
-      "source": "./plugins/mini-devkit"
+      "source": "./plugins/minidev"
     }
   ]
 }

@@ -46,7 +46,7 @@ Write the code until the critical tests, the whole test suite and the build pass
 
 If the approved list has no automated tests (the feature only shows in the real app), skip this step: the tester can't check anything there. Say so, and record "no tester: no automated tests" in the commit message.
 
-Otherwise, launch the `tester` agent (agent type `mini-devkit:tester`). Give it only:
+Otherwise, launch the `tester` agent (agent type `minidev:tester`). Give it only:
 - the feature's backlog entry, copied in full
 - the feature's diff: committed changes since the work started, plus uncommitted ones
 - the project's test and build commands

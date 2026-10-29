@@ -1,4 +1,4 @@
-# mini-devkit
+# minidev
 
 A Claude Code plugin with a fixed development cycle, the same in every project: ideas are interviewed until nothing is left open, features are built test-first and checked by an independent tester, and three product documents keep track of what may come, what exists and what changed.
 
@@ -7,23 +7,23 @@ A Claude Code plugin with a fixed development cycle, the same in every project: 
 In Claude Code:
 
 ```
-/plugin marketplace add ramonk2o/mini-devkit
-/plugin install mini-devkit@mini-devkit
+/plugin marketplace add ramonk2o/minidev
+/plugin install minidev@minidev
 ```
 
 Then, in each project where you want the cycle, run:
 
 ```
-/mini-devkit:setup
+/minidev:setup
 ```
 
-To get new versions later: `/plugin marketplace update mini-devkit`.
+To get new versions later: `/plugin marketplace update minidev`.
 
 ## What's inside
 
 | Piece | What it does |
 |---|---|
-| `setup` skill | Prepares a project for the cycle: git, CLAUDE.md, permissions, product documents. Runs only when you call `/mini-devkit:setup`. |
+| `setup` skill | Prepares a project for the cycle: git, CLAUDE.md, permissions, product documents. Runs only when you call `/minidev:setup`. |
 | `grilling` skill | Interviews you about an idea, a round of questions at a time, until nothing is left open. |
 | `document` skill | The only writer of `BACKLOG.md`, `SPEC.md` and `CHANGELOG.md`. |
 | `build` skill | Builds a backlog feature test-first, then has it checked by the `tester` agent before committing. |
@@ -60,7 +60,7 @@ You don't need to call `grilling`, `document` or `build` by name. Just talk ("no
 
 ### 1. Setup (once per project)
 
-`/mini-devkit:setup` reads the repository and proposes, all in one message for a single approval:
+`/minidev:setup` reads the repository and proposes, all in one message for a single approval:
 
 - `git init` and a `.gitignore`, if the project isn't a repository yet;
 - a `CLAUDE.md` with the project's real commands, test conventions and the development cycle (an existing CLAUDE.md is updated, not overwritten);
@@ -120,14 +120,14 @@ Each answers one question, so they never repeat each other:
 To work on the plugin from a local clone, add it as a marketplace by path instead of the GitHub name:
 
 ```
-/plugin marketplace add /path/to/mini-devkit
+/plugin marketplace add /path/to/minidev
 ```
 
-After changing the skills, bump `version` in `plugins/mini-devkit/.claude-plugin/plugin.json` and run `/plugin marketplace update mini-devkit` so installed copies pick it up.
+After changing the skills, bump `version` in `plugins/minidev/.claude-plugin/plugin.json` and run `/plugin marketplace update minidev` so installed copies pick it up.
 
 ## Credits
 
-`grilling` is from [mattpocock/skills](https://github.com/mattpocock/skills) (MIT, see `plugins/mini-devkit/skills/grilling/LICENSE`).
+`grilling` is from [mattpocock/skills](https://github.com/mattpocock/skills) (MIT, see `plugins/minidev/skills/grilling/LICENSE`).
 
 ## License
 
