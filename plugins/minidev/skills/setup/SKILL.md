@@ -16,7 +16,7 @@ Nothing is written before the user's OK. Collect the proposals of steps 1, 5, 6 
 
 ## 1. Check the project
 
-If the folder isn't a software project, say that this skill is for software projects and stop.
+If the folder isn't a software project, say that this skill is for software projects and stop. If it's empty or holds only notes for a project that doesn't exist yet, point to the `brainstorm` skill, which plans and scaffolds a new project, and stop.
 
 **Git.** The cycle commits after each feature, bug fix and document change, and builds features and fixes on their own branches, so the project must be a git repository. If it isn't one, propose `git init` and, when there's no `.gitignore`, a short one for the project's stack (dependencies, build output, test reports, `.env`, OS files like `.DS_Store`, and `.claude/settings.local.json`). If it's a repository with no commits yet, note that the first commit will come at the end (step 9).
 

@@ -23,6 +23,7 @@ To get new versions later: `/plugin marketplace update minidev`.
 
 | Piece | What it does |
 |---|---|
+| `brainstorm` skill | Starts a new project from an idea: interviews you about the product, decides the architecture and stack with you, picks the first feature, then scaffolds a project whose tests and build already run. |
 | `setup` skill | Prepares a project for the cycle: git, CLAUDE.md, permissions, product documents. Runs only when you call `/minidev:setup`. |
 | `grilling` skill | Interviews you about an idea, a round of questions at a time, until nothing is left open. |
 | `document` skill | The only writer of `BACKLOG.md`, `SPEC.md` and `CHANGELOG.md`. |
@@ -57,6 +58,16 @@ You don't need to call `grilling`, `document` or `build` by name. Just talk ("no
                                                   ▼
                                    merge into main, delete branch, push
 ```
+
+### 0. Brainstorm (new projects only)
+
+Starting from nothing, describe the idea ("I want to build an app that…") in an empty folder. `brainstorm` interviews you in `grilling` rounds, product first and stack second, each question with a recommended answer:
+
+- **Product:** the problem, who has it, the smallest first version that's already useful, what's out of scope, where users meet it, what it stores.
+- **Architecture and stack:** language, framework, the few parts the product splits into, storage, how rules are tested. Mature tools and few dependencies, checked against current docs; options are compared only where the choice is really open.
+- **Where to start:** the first version split into features in build order, starting with the thinnest path through the whole product, so the architecture is proven while it's still cheap to change.
+
+After you approve the plan, it scaffolds the project (git, the framework's generator, folders, a passing smoke test, a README), shows install, tests and build passing, and records the features in `BACKLOG.md` and the technical decisions in `SPEC.md`. No feature code is written: the first feature goes through `build`. Then run `/minidev:setup`.
 
 ### 1. Setup (once per project)
 
