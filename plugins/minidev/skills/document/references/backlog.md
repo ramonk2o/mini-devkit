@@ -88,6 +88,9 @@ Show the draft (and the area it will go in) and wait for the user's OK before wr
 When the user states an idea:
 - **Clear:** record it right away and tell them what was written.
 - **Vague:** ask 2 or 3 short questions first (what problem does it solve? how do they picture it working?).
+- **Leaves behavior open** (several connected decisions that would change what gets built): load the `grilling` skill and interview the user with it. Write its final summary in this entry format, so approving the summary approves the text that will be recorded (see Capture).
+
+"Just note it" (or the same in the user's language) always skips the questions and the interview: record what was said, with anything undecided as Open questions.
 
 Only record it; don't implement it.
 

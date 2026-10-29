@@ -28,9 +28,10 @@ To get new versions later: `/plugin marketplace update minidev`.
 | `grilling` skill | Interviews you about an idea, a round of questions at a time, until nothing is left open. |
 | `document` skill | The only writer of `BACKLOG.md`, `SPEC.md` and `CHANGELOG.md`. |
 | `build` skill | Builds a backlog feature test-first, then has it checked by the `tester` agent before committing. |
+| `fix` skill | Fixes a bug on its own branch, test-first when it can be reproduced, and records it in the changelog. |
 | `tester` agent | Independent tester: runs the suite, checks every rule is covered, tries to break the feature. Never fixes code. |
 
-You don't need to call `grilling`, `document` or `build` by name. Just talk ("note this idea…", "let's build X", "X has a bug…", "release 1.2.0"): the CLAUDE.md written by `setup` tells Claude which skill each step uses.
+You don't need to call `grilling`, `document`, `build` or `fix` by name. Just talk ("note this idea…", "let's build X", "X has a bug…", "release 1.2.0"): the CLAUDE.md written by `setup` tells Claude which skill each step uses. The steps themselves live in the skills, not in that CLAUDE.md, so updating the plugin updates every project.
 
 ## How the cycle works
 
@@ -74,7 +75,7 @@ After you approve the plan, it scaffolds the project (git, the framework's gener
 `/minidev:setup` reads the repository and proposes, all in one message for a single approval:
 
 - `git init` and a `.gitignore`, if the project isn't a repository yet;
-- a `CLAUDE.md` with the project's real commands, test conventions and the development cycle (an existing CLAUDE.md is updated, not overwritten);
+- a `CLAUDE.md` with the project's real commands, test conventions and which skill handles each step of the cycle (an existing CLAUDE.md is updated, not overwritten; a long cycle section written by older versions is slimmed down);
 - `.claude/settings.json` permissions for the test, build and local git commands (including `switch` and `merge`), so the cycle doesn't stop on a prompt for each run (install, publish, push and deletes keep asking);
 - what the cycle leaves orphaned: old `TODO.md`/`FEATURES.md`, local skills that overlap the plugin, broken references.
 
@@ -82,7 +83,7 @@ It then creates the missing product documents through `document`. The cycle need
 
 ### 2. Idea
 
-A clear idea is recorded straight into `BACKLOG.md` as an **Idea**. If it leaves behavior open, Claude starts a `grilling` interview: rounds of numbered questions, each with a recommended answer, asking only what can be decided now and looking up facts itself instead of asking you. The final summary is the backlog entry, so approving it approves what gets recorded. Saying "just note it" skips the interview.
+A clear idea is recorded straight into `BACKLOG.md` as an **Idea**. If it leaves behavior open, Claude starts a `grilling` interview: rounds of numbered questions, each with a recommended answer, asking only what can be decided now and looking up facts itself instead of asking you. The final summary is the backlog entry, so approving it approves what gets recorded. Saying "just note it" skips the interview. This routing lives in the `document` skill.
 
 ### 3. Build
 
@@ -111,8 +112,8 @@ This repeats until a round has no failures, or stops after 3 rounds to show you 
 
 ### Bugs and releases
 
-- **Bug:** no backlog entry, no tester, on its own `fix/<name>` branch, merged into main and pushed once the fix is confirmed. If it can be reproduced in a test, the test is written and shown failing first, then the fix. The fix is recorded under Fixed in the changelog (and in SPEC.md if a rule changed). If the fix needs a decision about behavior, it's a feature and goes back to the idea step.
-- **Release:** "release 1.4.0" moves the `[Unreleased]` changes into a version in `CHANGELOG.md`, after you confirm the version, date and entries. Pushing always asks first.
+- **Bug** (`fix` skill): no backlog entry, no tester, on its own `fix/<name>` branch, merged into main and pushed once the fix is confirmed. If it can be reproduced in a test, the test is written and shown failing first, then the fix. The fix is recorded under Fixed in the changelog (and in SPEC.md if a rule changed). If the fix needs a decision about behavior, it's a feature and goes back to the idea step.
+- **Release:** "release 1.4.0" moves the `[Unreleased]` changes into a version in `CHANGELOG.md`, after you confirm the version, date and entries, then pushes the commit and the tag.
 
 ## The three documents
 

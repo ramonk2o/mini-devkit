@@ -1,6 +1,6 @@
 ---
 name: build
-description: Implement a feature from the project's backlog test-first, then have it checked by an independent tester agent before it is committed. Use it whenever the user wants to implement, build, develop or start coding a feature, from BACKLOG.md or as a direct request, e.g. "let's build Tables", "implement the sync idea", "/build X", "start working on X", or when project instructions say to use the build skill.
+description: In projects set up for the minidev cycle (a CLAUDE.md that names it), implement a feature from the project's backlog test-first, then have it checked by an independent tester agent before it is committed. Use it whenever the user wants to implement, build, develop or start coding a feature, from BACKLOG.md or as a direct request, e.g. "let's build Tables", "implement the sync idea", "/build X", "start working on X", or when project instructions say to use the build skill.
 ---
 
 # Build
@@ -13,13 +13,15 @@ Talk to the user in the language of the conversation.
 
 ## 1. Start
 
+First check that the project uses the cycle: its CLAUDE.md (or AGENTS.md) names the `minidev` cycle or the `build` skill. If not, don't create a backlog, branches or documents in it: offer `/minidev:setup` and stop, or simply implement the request without this skill if the user prefers.
+
 1. Find the feature's entry in `BACKLOG.md`. For a direct request with no entry, create one with the `document` skill.
 2. If another feature is In progress, the `document` skill asks what to do; resolve it before going on.
 3. Check that the entry has enough rules to derive tests from: what the user sees, plus the edge cases that matter. Guessing missing rules would make the tests, and then the code, encode assumptions nobody approved, so settle them first, with the smallest step that does it:
    - **Enough rules** (usually, when the idea was interviewed): go on. Don't re-ask what the entry already decides.
    - **One to three specific points open:** ask them directly, each with your recommended answer, and record the answers in the entry's Decisions.
    - **Key behavior undecided across several connected decisions** (e.g. the entry is still a bare idea): stop and offer a `grilling` interview, recording the answers in the entry.
-4. Create the feature's branch: from the main branch (`main` or `master`), up to date and with a clean working tree, run `git switch -c feature/<short-name>`. All the feature's work and its commit happen there, so the main branch only ever receives finished, verified work. If there are uncommitted changes, ask the user what to do with them first. If the work is already on this feature's branch (e.g. resuming), stay on it.
+4. Create the feature's branch: from the main branch (`main` or `master`), brought up to date (`git pull --ff-only` if it has a remote) and with a clean working tree, run `git switch -c feature/<short-name>`. All the feature's work and its commit happen there, so the main branch only ever receives finished, verified work. If there are uncommitted changes, ask the user what to do with them first. If the work is already on this feature's branch (e.g. resuming), stay on it.
 5. Do whatever the project instructions require before writing code.
 
 ## 2. Critical test list
@@ -48,13 +50,13 @@ If the approved list has no automated tests (the feature only shows in the real 
 
 Otherwise, launch the `tester` agent (agent type `minidev:tester`). Give it only:
 - the feature's backlog entry, copied in full
-- the feature's diff: committed changes since the work started, plus uncommitted ones
+- the base commit: where the feature's branch left the main branch (`git merge-base HEAD <main branch>`). First stage everything with `git add -A` (the branch started from a clean tree, so it's all the feature's work): `git diff` doesn't show files git doesn't track yet, and the new modules and tests are exactly what the tester needs to see. The tester reads the change itself with `git diff <base>`, instead of a copy pasted in its prompt
 - the project's test and build commands
 
 Don't pass your explanations, the conversation or your own view of what might be weak. Its value is not knowing what you meant.
 
 Then act on its report:
-- **Failures (bugs):** fix the code, keep the tester's test that caught it, and launch a **new** tester with the same inputs (updated diff). A new one, so it doesn't carry the previous round's context.
+- **Failures (bugs):** fix the code, keep the tester's test that caught it, and launch a **new** tester with the same inputs (stage the fixes with `git add -A` first). A new one, so it doesn't carry the previous round's context.
 - **Extra tests that pass** and check a rule from the entry: keep them.
 - **Assumptions** (a test of a rule that was never decided): don't keep that test. Ask the user, record the answer in the entry's Decisions, and test it if the answer makes it a rule.
 - **Uncovered rules:** add the missing tests.
@@ -70,6 +72,6 @@ Repeat until a report comes back with no failures. After 3 rounds with failures 
    - the tester's last report, summarized: rounds run, what it found and how it was resolved, extra tests kept (or why there was no tester)
    - what is left for the user to check by hand, as a block starting with a line that says exactly `To check by hand:`, one item per line, so it can be found later with `git log --grep`
 4. Show the user the "To check by hand" list and wait for them to check it. If something fails, fix it on the same branch (test first when it can be reproduced in one) and commit.
-5. **Merge and push:** once the user confirms everything works (or right after the commit, if there's nothing to check by hand), switch to the main branch, `git merge feature/<short-name>`, delete the branch with `git branch -d`, and push the main branch if the repository has a remote. If the merge has conflicts, stop and show them instead of resolving them on your own. Anything that fails after the merge is fixed as a bug.
+5. **Merge and push:** once the user confirms everything works (or right after the commit, if there's nothing to check by hand), switch to the main branch, bring it up to date (`git pull --ff-only` if it has a remote), `git merge feature/<short-name>`, delete the branch with `git branch -d`, and push the main branch if the repository has a remote. If the merge has conflicts, stop and show them instead of resolving them on your own. Anything that fails after the merge is fixed as a bug.
 
 A feature with automated tests is only finished through step 5: without a tester report it hasn't been independently checked, and the commit message would claim more than was done.

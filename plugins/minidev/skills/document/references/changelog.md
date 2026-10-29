@@ -48,6 +48,6 @@ When the user releases a version:
    ```
    The first version links to `<repo>/tree/<version>`.
 5. **Tag** the release commit with an annotated tag named like the existing tags (e.g. `1.4.0`), locally.
-6. Pushing the commit and the tag asks first.
+6. Push the commit and the tag, if the repository has a remote.
 
 Other release steps (bumping the version in package or manifest files, building a package, submitting to a store) belong to the project: follow its instructions.

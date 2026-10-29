@@ -1,12 +1,12 @@
 ---
 name: setup
-description: Set up a software project for the minidev development cycle (grilling, document and build skills, tester agent) by making it a git repository if needed, writing or updating its CLAUDE.md, allowing its test and build commands in the project's permissions, creating the product documents, and pointing out what adopting the cycle left orphaned or redundant. Run only when the user invokes it.
+description: Set up a software project for the minidev development cycle (grilling, document, build and fix skills, tester agent) by making it a git repository if needed, writing or updating its CLAUDE.md, allowing its test and build commands in the project's permissions, creating the product documents, and pointing out what adopting the cycle left orphaned or redundant. Run only when the user invokes it.
 disable-model-invocation: true
 ---
 
 # Setup
 
-Prepares a project so it works with the development cycle of the `minidev` plugin: the `grilling`, `document` and `build` skills and the `tester` agent, which come with this plugin. The cycle is the same in every project; what changes is the project's own facts (commands, conventions, how tests are written), so the CLAUDE.md has a fixed part, copied from the template below, and a discovered part, found in the repository or asked.
+Prepares a project so it works with the development cycle of the `minidev` plugin: the `grilling`, `document`, `build` and `fix` skills and the `tester` agent, which come with this plugin. The cycle's steps live in those skills; the CLAUDE.md only holds the project's facts and says which skill handles each step, so updating the plugin updates every project. The cycle is the same in every project; what changes is the project's own facts (commands, conventions, how tests are written), so the CLAUDE.md has a fixed part, copied from the template below, and a discovered part, found in the repository or asked.
 
 Talk to the user in the language of the conversation. Write the CLAUDE.md in English.
 
@@ -66,17 +66,14 @@ Build the file from the template below. Fill every `<…>`; the final file has n
 - <Rules that change data or state> are tested <how>, as in `<example test file>`. Only what needs <the real app, named for this project: e.g. a real browser, a device> (<what: e.g. focus, dragging, visuals>) goes into "To check by hand".
 
 ## Development cycle
-Uses the `grilling`, `document` and `build` skills and the `tester` agent from the `minidev` plugin. When a step needs one that isn't available, tell the user and stop; don't imitate it from memory.
-
-1. **Idea:** if the idea is clear, record it with `document`. If it leaves behavior open (decisions that would change what gets built), start a `grilling` interview; before its final summary, load `document` and write the summary as the backlog entry, so my OK approves the text that will be recorded. "Just note it" (<the same phrases in the user's language>) always skips the interview.
-2. **Build:** `build`.
-3. **Bugs:** no backlog entry or tester. Work on a `fix/<short-name>` branch created from the up-to-date main branch. If the bug can be reproduced in a test (see Tests), write the test and show it fails, then fix it. If it needs <the same real app as in Tests>, put the steps to reproduce it in the commit message's `To check by hand:` block. Record it with `document` (CHANGELOG under Fixed; SPEC.md if a rule changed) and commit on the branch. Once it's confirmed fixed, merge it into the main branch, delete the branch and push. If the fix needs a decision about behavior, it's a feature: go to step 1.
-4. **Release:** follow <where the release steps live>.
+This project uses the `minidev` cycle. When a step needs one of its skills and it isn't available, tell the user and stop; don't imitate it from memory.
+- Ideas: `document`. Features: `build`. Bugs: `fix`.
+- Releases: <where the release steps live>.
 ````
 
 Template notes:
-- The **Development cycle** section is copied as is. Only the "Just note it" phrases, the name of the real app and the Release target change.
-- **Release:** if the project doesn't publish versions, drop step 4. If it does but the steps aren't written anywhere, use "cut the version with `document`" and offer to write the steps down later.
+- The **Development cycle** section is copied as is. Only the Release target changes.
+- **Release:** if the project doesn't publish versions, drop the Releases line. If it does but the steps aren't written anywhere, use "cut the version with `document`" and offer to write the steps down later.
 - **Tests:** if no existing test shows how state-changing rules are tested, drop the "as in" part rather than citing a weak example.
 - **Conventions:** drop the section when there's nothing to put in it.
 - Keep the project's existing specifics that still hold (an extra section, a rule about permissions, a doc pointer): they belong to the project, not to this template.
@@ -99,9 +96,9 @@ Never add install, publish, deploy or `git push` commands, or anything that dele
 Check only what adopting the cycle leaves behind. This is not a general cleanup: anything unrelated to the cycle stays as it is, even if it looks unnecessary.
 
 - **Old documents** that now overlap BACKLOG, SPEC or CHANGELOG (`TODO.md`, `FEATURES.md`, `ROADMAP.md`, `HISTORY.md`…). Don't convert them: point them out; aligning them is the `document` skill's job (step 9).
-- **Sections of the old CLAUDE.md** that the new text replaces: an older workflow, backlog or test rules that the skills now own, or a line saying the cycle is installed globally in `~/.claude/`.
+- **Sections of the old CLAUDE.md** that the new text replaces: an older workflow, backlog or test rules that the skills now own, the longer Development cycle section written by earlier versions of this skill (idea, build, bug and release steps spelled out), or a line saying the cycle is installed globally in `~/.claude/`.
 - **Local skills, agents and commands** (`.claude/skills/`, `.claude/agents/`, `.claude/commands/`) that overlap the cycle: a local build, backlog or tester, or an old copy of one of this plugin's skills. If one has something project-specific the plugin's doesn't cover, propose moving that part into the CLAUDE.md before removing it. Other local skills are just listed.
-- **Global copies of the cycle** in `~/.claude/skills/` (`grilling`, `document`, `build`, `bootstrap`) or `~/.claude/agents/tester.md`: they duplicate this plugin and may be older versions. Point them out and suggest removing them; they're outside the project, so this always needs its own explicit OK.
+- **Global copies of the cycle** in `~/.claude/skills/` (`grilling`, `document`, `build`, `fix`, `bootstrap`) or `~/.claude/agents/tester.md`: they duplicate this plugin and may be older versions. Point them out and suggest removing them; they're outside the project, so this always needs its own explicit OK.
 - **Broken references:** the CLAUDE.md (old or new) pointing to a file, script or command that doesn't exist.
 
 For each item, say what it is, why it's orphaned or redundant, and what you suggest (remove, move a part to the CLAUDE.md, leave).

@@ -1,6 +1,6 @@
 ---
 name: document
-description: Own a project's product documents and keep their roles apart, BACKLOG.md (ideas and the feature being built), SPEC.md (how the product works today) and CHANGELOG.md (what changed in each version), creating any of them that's missing, adapted to the project. Use it for ANY change to these files, even a one-word fix, and whenever the user wants to record, list, start, finish, discard or clean up features or ideas ("note this idea", "what's in the backlog?", "X is done"), update or create the spec, write changelog entries, or cut a release ("release 1.4.0", "prepare the new version"). Also use it when another skill (like build) needs a feature's status changed or these documents updated.
+description: In projects set up for the minidev cycle, or that already have these files, own a project's product documents and keep their roles apart, BACKLOG.md (ideas and the feature being built), SPEC.md (how the product works today) and CHANGELOG.md (what changed in each version), creating any of them that's missing, adapted to the project. Use it for ANY change to these files, even a one-word fix, and whenever the user wants to record, list, start, finish, discard or clean up features or ideas ("note this idea", "what's in the backlog?", "X is done"), update or create the spec, write changelog entries, or cut a release ("release 1.4.0", "prepare the new version"). Also use it when another skill (like build) needs a feature's status changed or these documents updated.
 ---
 
 # Product
@@ -65,4 +65,4 @@ Each document starts with a short legend, so it's readable without this skill. T
 
 ## Commits
 
-In a git repository, commit after writing, with a short message saying what changed (e.g. "Tables: recorded in BACKLOG (Idea)", "Sync discarded", "Release 1.4.0"). Commit only these documents, never other pending changes. When the change is part of a larger piece of work being committed, such as finishing a feature, it goes in that commit instead. Pushing commits or tags always asks first.
+In a git repository, commit after writing, with a short message saying what changed (e.g. "Tables: recorded in BACKLOG (Idea)", "Sync discarded", "Release 1.4.0"). Commit only these documents, never other pending changes. When the change is part of a larger piece of work being committed, such as finishing a feature, it goes in that commit instead. Don't push these commits on their own: they go out with the next merge into the main branch or release.
